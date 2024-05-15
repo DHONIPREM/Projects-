@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>College Chatbot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9fa;
+    }
+
+    .chatbot-container {
+      max-width: 400px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .chatbot-messages {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .message {
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+
+    .user {
+      background-color: #007bff;
+      color: #fff;
+    }
+
+    .bot {
+      background-color: #eaeaea;
+    }
+
+    .chatbot-input-form {
+      display: flex;
+    }
+
+    .chatbot-input-form input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px 0 0 5px;
+    }
+
+    .chatbot-input-form button {
+      padding: 10px 15px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 0 5px 5px 0;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="root" class="chatbot-container"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.development.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.development.js"></script>
+  <script type="text/babel">
+    function CollegeChatbot() {
+      const [messages, setMessages] = React.useState([]);
+      const [input, setInput] = React.useState('');
+
+      const handleResponse = (userInput) => {
+        const lowerInput = userInput.toLowerCase().trim();
+        let response;
+        switch (lowerInput) {
+          case 'hi':
+          case 'hello':
+            response = "Hello! How can I assist you today?";
+            break;
+          case 'courses':
+            response = "We offer a wide range of courses including Computer Science, Biology, History, and Mathematics. Is there a specific course you're interested in?";
+            break;
+          case 'admissions':
+            response = "For admissions information, please visit our website or contact our admissions office at admissions@college.edu.";
+            break;
+          case 'contact':
+            response = "You can contact us at info@college.edu or call us at +1 (123) 456-7890. We're available Monday through Friday, 9:00 AM to 5:00 PM.";
+            break;
+          default:
+            response = "I'm sorry, I didn't understand that. Please feel free to ask me anything else.";
+        }
+        return response;
+      };
+
+      const handleMessageSubmit = (e) => {
+        e.preventDefault();
+        if (!input) return;
+        const userMessage = { text: input, sender: 'user' };
+        const botMessage = { text: handleResponse(input), sender: 'bot' };
+        setMessages([...messages, userMessage, botMessage]);
+        setInput('');
+      };
+
+      return (
+        <div>
+          <div className="chatbot-messages">
+            {messages.map((message, index) => (
+              <div key={index} className={`message ${message.sender}`}>
+                {message.text}
+              </div>
+            ))}
+          </div>
+          <form onSubmit={handleMessageSubmit} className="chatbot-input-form">
+            <input
+              type="text"
+              placeholder="Type your message..."
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+            />
+            <button type="submit">Send</button>
+          </form>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<CollegeChatbot />, document.getElementById('root'));
+  </script>
+</body>
+</html>
